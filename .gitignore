@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+artifacts/*
+!artifacts/.gitkeep
+data/*
+!data/train/
+!data/train/Body/
+!data/train/Hand/
+!data/train/Leg/
+*.keras
+*.joblib
