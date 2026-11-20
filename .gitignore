@@ -13,3 +13,8 @@ data/*
 !data/train/Leg/
 *.keras
 *.joblib
+
+# Victim-detection dataset and generated training outputs
+victim_detection/data/
+victim_detection/runs/
+*.pt
