@@ -144,6 +144,10 @@ The implementation follows the three-class CNN feature extraction plus SVM/Rando
 
 A GitHub Actions workflow runs the dataset-loader unit tests on pushes and pull requests to `main`. The lightweight test dependencies are listed separately in `requirements-test.txt`, so the tests do not need TensorFlow or a GPU.
 
+## Separate victim-detection experiment
+
+A separate YOLO-based person/victim detection module is available in [victim_detection/README.md](victim_detection/README.md). It uses the public PDD `879real survivor` image/YOLO-label collection and does not change this repository's project title or remove the original Body/Hand/Leg classifier. Prepare its dataset with `python victim_detection/prepare_dataset.py`, then train with `python victim_detection/train.py`. The detector reports object-detection metrics (precision, recall, mAP50, mAP50-95), which are not directly comparable to the original classifier's accuracy. Dataset images and model weights are downloaded/generated locally and are not committed.
+
 ## Current completion status
 
 - [x] CNN + SVM, Random Forest, and Decision Tree training pipeline committed.
