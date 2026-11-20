@@ -1,32 +1,55 @@
-# DisasterSAR — Disaster Search & Rescue Image Classification
+# DisasterSAR: Disaster Search and Rescue Image Classification
 
-A reproducible project scaffold based on the college report `Machine Learning-Based Disaster Prediction and Autonomous Search Operations Platform`.
+This repository contains a reproducible Python implementation of the image-classification workflow described in the college project report **Machine Learning-Based Disaster Prediction and Autonomous Search Operations Platform**.
 
-## What this code does
-- Reads images from three class folders: `Body`, `Hand`, and `Leg`.
-- Trains a small CNN as an image feature extractor.
-- Trains SVM, Random Forest, and Decision Tree classifiers on the CNN features.
-- Reports accuracy, precision, recall, F1-score, and a confusion matrix.
-- Predicts the class of a new image using the saved CNN + SVM pipeline.
+## Project workflow
 
-> Important: this repository scaffold is a clean reimplementation of the workflow described in the report. It is not a recovered copy of the original notebook. The PDF contains notebook screenshots and does not provide a complete downloadable source repository or the dataset. No accuracy result is claimed until you run training on the original/authorized dataset.
+1. Read disaster-scene images labelled as **Body**, **Hand**, or **Leg**.
+2. Resize and normalize images.
+3. Train a Convolutional Neural Network (CNN) to learn image representations.
+4. Extract CNN features and train three classifiers: Support Vector Machine (SVM), Random Forest, and Decision Tree.
+5. Compare accuracy, macro precision, macro recall, macro F1-score, and confusion matrices.
+6. Use a saved CNN feature extractor and selected classifier to classify a new image.
+
+> **Scope and research honesty:** This repository implements the image-classification portion of the report. It does not implement physical robot navigation, geospatial localization, or a validated live disaster-response system. The PDF supplied for this project contains notebook screenshots and does not include the original notebook source or image dataset. This is therefore a clean reimplementation, not a recovery of the original source. No accuracy figure is guaranteed; use the metrics produced by your own dataset run.
+
+## Repository layout
+
+```text
+Disastersar/
+├── data/
+│   └── train/
+│       ├── Body/
+│       ├── Hand/
+│       └── Leg/
+├── src/
+│   ├── __init__.py
+│   ├── data.py
+│   └── model.py
+├── artifacts/                 # Generated after training; not committed
+├── train.py
+├── predict.py
+├── requirements.txt
+└── README.md
+```
 
 ## Requirements
+
 - Python 3.10 or 3.11 recommended
-- Windows, macOS, or Linux
-- CPU is sufficient for a small experiment; training can take time.
+- CPU is sufficient for a small dataset; a compatible GPU can speed up CNN training
+- Internet access is needed only to install packages
 
-## 1. Create and activate a virtual environment
+Install on Windows PowerShell:
 
-Windows PowerShell:
 ```powershell
 py -3.11 -m venv .venv
-.venv\\Scripts\\Activate.ps1
+.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
 macOS/Linux:
+
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -34,43 +57,77 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## 2. Add your dataset
+## Dataset preparation
 
-Arrange images like this:
+Place labelled images in these folders:
+
 ```text
-data/
-  train/
-    Body/
-    Hand/
-    Leg/
+data/train/Body/
+data/train/Hand/
+data/train/Leg/
 ```
-The dataset is not included because it was not present in the supplied PDF. Use only images you have permission to use and include their source/license in your project documentation.
 
-## 3. Train and evaluate
+Supported formats: JPG, JPEG, PNG, BMP, and WEBP. Each class needs at least two readable images for a stratified train/test split; more images per class are strongly recommended. Keep separate, unseen images for an additional final evaluation when possible.
+
+The dataset is not included in this repository because it was not supplied with the report. Use images you are authorized to use, and document their source and license. Do not upload private or restricted images.
+
+## Train and evaluate
+
+From the repository root:
 
 ```bash
-python train.py --data data/train --epochs 8
+python train.py --data data/train --epochs 12 --batch-size 16 --test-size 0.2
 ```
-The script saves the CNN feature extractor, SVM/Random Forest/Decision Tree models, label encoder, metrics JSON, and confusion-matrix images under `artifacts/`.
 
-## 4. Predict an image
+The training script:
+- Splits images into stratified training and test sets.
+- Trains a compact CNN with basic image augmentation.
+- Extracts CNN features.
+- Fits SVM, Random Forest, and Decision Tree classifiers.
+- Prints classification reports and saves metrics and confusion matrices.
+
+Generated files are saved in `artifacts/`:
+
+- `cnn_classifier.keras`
+- `cnn_feature_extractor.keras`
+- `label_encoder.joblib`
+- `svm_model.joblib`
+- `random_forest_model.joblib`
+- `decision_tree_model.joblib`
+- `metrics.json`
+- Confusion-matrix PNG files
+
+## Predict a new image
+
+Default SVM:
 
 ```bash
 python predict.py --image path/to/test_image.jpg
 ```
-The prediction is a class label (Body, Hand, or Leg), not a guarantee that a living victim has been located. This is an educational image-classification prototype, not a validated rescue or safety system.
 
-## Project structure
-```text
-src/                 # Dataset loading and CNN model
-train.py             # CNN feature extraction + ML classifier training predict.py           # Image prediction
-requirements.txt     # Python dependencies
-data/train/          # Add labeled images here
-artifacts/            # Generated model files and metrics
+Choose another classifier:
+
+```bash
+python predict.py --image path/to/test_image.jpg --model random-forest
+python predict.py --image path/to/test_image.jpg --model decision-tree
 ```
 
-## Before publishing results
-1. Run training with your real dataset.
-2. Test on images not used for training.
-3. Record the actual metrics and dataset source/license.
-4. Do not claim the report's accuracy as independently verified.
+Predictions are limited to the classes represented in the training dataset. A predicted body-part label is not proof that a living person is present or that a rescue location has been identified. This prototype must not be used as the sole basis for emergency decisions.
+
+## Evaluation and reporting
+
+Use the values written to `artifacts/metrics.json` after a successful run. Accuracy alone can hide class imbalance, so review precision, recall, F1-score, class counts, and confusion matrices. For a fair final evaluation, test on images that were not used for training or model selection.
+
+Do not copy the accuracy stated in the report into a results section unless you can reproduce it with the same dataset, split, and evaluation procedure.
+
+## Limitations and future work
+
+- Obtain and document the original labelled dataset.
+- Evaluate on an independent disaster-scene dataset.
+- Add video/live-camera inference and a human-reviewed alert workflow.
+- Integrate robot hardware, mapping, and location telemetry only after separate validation and safety testing.
+- Consider stronger pretrained CNN backbones and explainability tools.
+
+## Project reference
+
+The implementation follows the three-class CNN feature extraction plus SVM/Random Forest/Decision Tree workflow described in the supplied college project report.
