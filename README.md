@@ -139,3 +139,19 @@ Do not copy the accuracy stated in the report into a results section unless you 
 ## Project reference
 
 The implementation follows the three-class CNN feature extraction plus SVM/Random Forest/Decision Tree workflow described in the supplied college project report.
+
+## Automated checks
+
+A GitHub Actions workflow runs the dataset-loader unit tests on pushes and pull requests to `main`. The lightweight test dependencies are listed separately in `requirements-test.txt`, so the tests do not need TensorFlow or a GPU.
+
+## Current completion status
+
+- [x] CNN + SVM, Random Forest, and Decision Tree training pipeline committed.
+- [x] Image loading, preprocessing, stratified split, metrics, and confusion-matrix generation implemented.
+- [x] Dataset preparation instructions and public research dataset references documented.
+- [x] GitHub Actions test workflow added.
+- [ ] Original Body/Hand/Leg labelled image dataset obtained and verified.
+- [ ] Full CNN training and evaluation run on that dataset.
+- [ ] Real model artifacts and measured metrics generated.
+
+The remaining items depend on obtaining valid class-labelled images. The report's abstract says a GitHub dataset URL should follow, but the URL is absent from the supplied PDF text. The report's testing section also mentions DARPA2000, which is not reconciled with the three Body/Hand/Leg classes described elsewhere. These source inconsistencies must be resolved before claiming a faithful reproduction.
