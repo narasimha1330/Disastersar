@@ -17,15 +17,13 @@ This repository contains a reproducible Python implementation of the image-class
 
 ```text
 Disastersar/
-├── data/
-│   └── train/
-│       ├── Body/
-│       ├── Hand/
-│       └── Leg/
+├── data/train/{Body,Hand,Leg}/
 ├── src/
 │   ├── __init__.py
 │   ├── data.py
 │   └── model.py
+├── tests/
+│   └── test_data.py
 ├── artifacts/                 # Generated after training; not committed
 ├── train.py
 ├── predict.py
@@ -70,6 +68,16 @@ data/train/Leg/
 Supported formats: JPG, JPEG, PNG, BMP, and WEBP. Each class needs at least two readable images for a stratified train/test split; more images per class are strongly recommended. Keep separate, unseen images for an additional final evaluation when possible.
 
 The dataset is not included in this repository because it was not supplied with the report. Use images you are authorized to use, and document their source and license. Do not upload private or restricted images.
+
+## Run the tests
+
+After installing requirements, run:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The tests create a temporary sample dataset and check image loading and stratified splitting. They do not train the CNN.
 
 ## Train and evaluate
 
