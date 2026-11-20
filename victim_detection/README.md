@@ -4,7 +4,7 @@ This module adds a single-class **person/victim bounding-box detector** to the e
 
 ## Dataset
 
-Uses the public [Post-Disaster Dataset](https://github.com/HaoqianSong/Post-Disaster-Dataset), specifically its `879real survivor` collection: 879 post-disaster images and corresponding YOLO-format labels. The dataset repository describes these as survivor images for UAV search and rescue. The restricted `155real survivor` test set is not used.
+Uses the public [Post-Disaster Dataset](https://github.com/HaoqianSong/Post-Disaster-Dataset), specifically its `879real survivor` collection: 879 post-disaster images and corresponding YOLO-format labels. The dataset repository describes these as survivor images for UAV search and rescue. Its README does not provide an explicit open-source license, so check with the dataset authors and follow the paper's usage terms before redistribution or commercial use. The restricted `155real survivor` test set is not used.
 
 The labels are expected to use YOLO class ID 0 for person, with normalized `class x_center y_center width height` rows. The preparation script validates that assumption and stops on unexpected class IDs or invalid boxes instead of silently relabeling data.
 
